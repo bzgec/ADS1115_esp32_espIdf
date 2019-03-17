@@ -1,4 +1,5 @@
 /*
+ * Based on Texas Instruments ADS1113/4/5 datasheet, May 2009 (SBAS444B, revised October 2009)
  * Copied/modified from:
  *   - https://github.com/addicore/ADS1115
  *   - https://github.com/Molorius/esp32-ads1115

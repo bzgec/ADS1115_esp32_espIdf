@@ -1,4 +1,5 @@
 /*
+ * Based on Texas Instruments ADS1113/4/5 datasheet, May 2009 (SBAS444B, revised October 2009)
  * Copied/modified from:
  *   - https://github.com/addicore/ADS1115
  *   - https://github.com/Molorius/esp32-ads1115
@@ -9,7 +10,12 @@
 #define __ADS1115_h
 
 #include "Types.h"
+#include "esp_err.h"
 
+// -----------------------------------------------------------------------------
+// Arduino-style "printf" debug constant (uncomment to enable)
+// -----------------------------------------------------------------------------
+//#define ADS1115_SERIAL_DEBUG
 
 #define ADS1115_RA_CONVERSION       0x00
 #define ADS1115_RA_CONFIG           0x01
