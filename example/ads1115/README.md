@@ -1,5 +1,3 @@
-# Hello World Example
+# ESP32 FreeRTOS ESP-IDF example
 
-Starts a FreeRTOS task to print "Hello World"
-
-See the README.md file in the upper level 'examples' directory for more information about examples.
+This example depends on other libraries like movingAverage, dataTypes, customPrintf.
