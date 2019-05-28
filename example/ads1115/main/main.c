@@ -119,6 +119,7 @@ void init_ADS1115()
 void task_read_ads1115(void *pvParameter)
 {
 	esp_err_t espErr;
+  float fDummy;
 
   while(1) 
   {
@@ -129,8 +130,17 @@ void task_read_ads1115(void *pvParameter)
     if(espErr != ESP_OK) printf("ERROR triggering conversion: 0x%.2X\n", espErr);
 		vTaskDelay(TASK_INTERVAL_ADS1115_SINGLE_READ / portTICK_PERIOD_MS);
     ads1115_pollAlertReadyPin();
-		// check movingAverage.h for strength of the filter
-    g_fVoltageA0 = movingAvg_floatA0(ads1115_getMilliVolts(GET_CONVERSION_READ_ONLY));
+		// check movingAverage.h for "strength" of the filter
+    espErr = ads1115_getMilliVolts(GET_CONVERSION_READ_ONLY, &fDummy);
+    if(espErr != ESP_OK) 
+    {
+      ESP_LOGE(TAG_EXTERNAL_ADC, "Getting value from ADC - A0: 0x%.2X", espErr);
+    }
+    else
+    {
+      g_fVoltageA0 = movingAvg_floatA0(fDummy);
+    }
+    
   
     espErr = ads1115_setMultiplexer(ADS1115_MUX_P1_NG);
     if(espErr != ESP_OK) printf("ERROR setting multiplexer A1: 0x%.2X\n", espErr);
@@ -138,8 +148,17 @@ void task_read_ads1115(void *pvParameter)
     if(espErr != ESP_OK) printf("ERROR triggering conversion: 0x%.2X\n", espErr);
 		vTaskDelay(TASK_INTERVAL_ADS1115_SINGLE_READ / portTICK_PERIOD_MS);
     ads1115_pollAlertReadyPin();
-		// check movingAverage.h for strength of the filter
-    g_fVoltageA1 = movingAvg_floatA1(ads1115_getMilliVolts(GET_CONVERSION_READ_ONLY));
+		// check movingAverage.h for "strength" of the filter
+    espErr = ads1115_getMilliVolts(GET_CONVERSION_READ_ONLY, &fDummy);
+    if(espErr != ESP_OK) 
+    {
+      ESP_LOGE(TAG_EXTERNAL_ADC, "Getting value from ADC - A1: 0x%.2X", espErr);
+    }
+    else
+    {
+      g_fVoltageA1 = movingAvg_floatA1(fDummy);
+    }
+    
     
     vTaskDelay(TASK_INTERVAL_ADS1115 / portTICK_PERIOD_MS);
   }

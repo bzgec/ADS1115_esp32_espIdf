@@ -371,15 +371,20 @@ BOOL ads1115_pollConversion(WORD wMax_retries)
  * @see ADS1115_MUX_P2_NG
  * @see ADS1115_MUX_P3_NG
  */
-SHORT ads1115_getConversion(BOOL bTriggerAndPoll) 
+esp_err_t ads1115_getConversion(BOOL bTriggerAndPoll, SHORT *psData) 
 {
+	esp_err_t espErr;
+
   if (bTriggerAndPoll && s_bDevMode == ADS1115_MODE_SINGLESHOT) 
   {
     ads1115_triggerConversion();
     ads1115_pollConversion(I2CDEV_DEFAULT_READ_TIMEOUT);
   }
-  ads1115_readWord(ADS1115_RA_CONVERSION, s_awBuffer);
-  return s_awBuffer[0];
+
+  espErr = ads1115_readWord(ADS1115_RA_CONVERSION, s_awBuffer);
+  *psData = s_awBuffer[0];
+
+  return espErr;
 }
 /** Get AIN0/N1 differential.
  * This changes the MUX setting to AIN0/N1 if necessary, triggers a new
@@ -388,13 +393,13 @@ SHORT ads1115_getConversion(BOOL bTriggerAndPoll)
  * @return 16-bit signed differential value
  * @see getConversion()
  */
-SHORT ads1115_getConversionP0N1()
+esp_err_t ads1115_getConversionP0N1(SHORT *psData)
 {
   if (s_byMuxMode != ADS1115_MUX_P0_N1) 
   {
     ads1115_setMultiplexer(ADS1115_MUX_P0_N1);
   }
-  return ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+  return ads1115_getConversion(GET_CONVERSION_READ_ONLY, psData);
 }
 
 /** Get AIN0/N3 differential.
@@ -404,13 +409,13 @@ SHORT ads1115_getConversionP0N1()
  * @return 16-bit signed differential value
  * @see getConversion()
  */
-SHORT ads1115_getConversionP0N3() 
+esp_err_t ads1115_getConversionP0N3(SHORT *psData) 
 {
     if (s_byMuxMode != ADS1115_MUX_P0_N3)
     {
       ads1115_setMultiplexer(ADS1115_MUX_P0_N3);
     } 
-    return ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+    return ads1115_getConversion(GET_CONVERSION_READ_ONLY, psData);
 }
 
 /** Get AIN1/N3 differential.
@@ -420,13 +425,13 @@ SHORT ads1115_getConversionP0N3()
  * @return 16-bit signed differential value
  * @see getConversion()
  */
-SHORT ads1115_getConversionP1N3() 
+esp_err_t ads1115_getConversionP1N3(SHORT *psData) 
 {
     if (s_byMuxMode != ADS1115_MUX_P1_N3)
     {
       ads1115_setMultiplexer(ADS1115_MUX_P1_N3);
     } 
-    return ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+    return ads1115_getConversion(GET_CONVERSION_READ_ONLY, psData);
 }
 
 /** Get AIN2/N3 differential.
@@ -436,13 +441,13 @@ SHORT ads1115_getConversionP1N3()
  * @return 16-bit signed differential value
  * @see getConversion()
  */
-SHORT ads1115_getConversionP2N3() 
+esp_err_t ads1115_getConversionP2N3(SHORT *psData) 
 {
     if (s_byMuxMode != ADS1115_MUX_P2_N3)
     {
       ads1115_setMultiplexer(ADS1115_MUX_P2_N3);
     }
-    return ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+    return ads1115_getConversion(GET_CONVERSION_READ_ONLY, psData);
 }
 
 /** Get AIN0/GND differential.
@@ -452,13 +457,13 @@ SHORT ads1115_getConversionP2N3()
  * @return 16-bit signed differential value
  * @see getConversion()
  */
-SHORT ads1115_getConversionP0GND() 
+esp_err_t ads1115_getConversionP0GND(SHORT *psData) 
 {
     if (s_byMuxMode != ADS1115_MUX_P0_NG) 
     {
       ads1115_setMultiplexer(ADS1115_MUX_P0_NG);
     }
-    return ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+    return ads1115_getConversion(GET_CONVERSION_READ_ONLY, psData);
 }
 /** Get AIN1/GND differential.
  * This changes the MUX setting to AIN1/GND if necessary, triggers a new
@@ -467,13 +472,13 @@ SHORT ads1115_getConversionP0GND()
  * @return 16-bit signed differential value
  * @see getConversion()
  */
-SHORT ads1115_getConversionP1GND() 
+esp_err_t ads1115_getConversionP1GND(SHORT *psData) 
 {
     if (s_byMuxMode != ADS1115_MUX_P1_NG)
     {
       ads1115_setMultiplexer(ADS1115_MUX_P1_NG);
     }
-    return ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+    return ads1115_getConversion(GET_CONVERSION_READ_ONLY, psData);
 }
 /** Get AIN2/GND differential.
  * This changes the MUX setting to AIN2/GND if necessary, triggers a new
@@ -482,13 +487,13 @@ SHORT ads1115_getConversionP1GND()
  * @return 16-bit signed differential value
  * @see getConversion()
  */
-SHORT ads1115_getConversionP2GND() 
+esp_err_t ads1115_getConversionP2GND(SHORT *psData) 
 {
     if (s_byMuxMode != ADS1115_MUX_P2_NG) 
     {
       ads1115_setMultiplexer(ADS1115_MUX_P2_NG);
     }
-    return ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+    return ads1115_getConversion(GET_CONVERSION_READ_ONLY, psData);
 }
 /** Get AIN3/GND differential.
  * This changes the MUX setting to AIN3/GND if necessary, triggers a new
@@ -497,13 +502,13 @@ SHORT ads1115_getConversionP2GND()
  * @return 16-bit signed differential value
  * @see getConversion()
  */
-SHORT ads1115_getConversionP3GND() 
+esp_err_t ads1115_getConversionP3GND(SHORT *psData) 
 {
     if (s_byMuxMode != ADS1115_MUX_P3_NG) 
     {
       ads1115_setMultiplexer(ADS1115_MUX_P3_NG);
     }
-    return ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+    return ads1115_getConversion(GET_CONVERSION_READ_ONLY, psData);
 }
 
 /** Get the current voltage reading
@@ -513,33 +518,41 @@ SHORT ads1115_getConversionP3GND()
  * @param bTriggerAndPoll If true (and only in singleshot mode) the conversion trigger 
  *        will be executed and the conversion results will be polled.
  */
-float ads1115_getMilliVolts(BOOL bTriggerAndPoll) 
+esp_err_t ads1115_getMilliVolts(BOOL bTriggerAndPoll, float *pfData)
 {
-  float fReturn = FALSE;
+  SHORT sData = 0;
+  esp_err_t espErr = ESP_OK;
+
   switch (s_byPGAMode) 
   { 
     case ADS1115_PGA_6P144:
-      fReturn = (ads1115_getConversion(bTriggerAndPoll) * ADS1115_MV_6P144);
+      espErr = ads1115_getConversion(bTriggerAndPoll, &sData);
+      *pfData = sData * ADS1115_MV_6P144;
       break;    
     case ADS1115_PGA_4P096:
-      fReturn = (ads1115_getConversion(bTriggerAndPoll) * ADS1115_MV_4P096);
+      espErr = ads1115_getConversion(bTriggerAndPoll, &sData);
+      *pfData = sData * ADS1115_MV_4P096;
       break;             
     case ADS1115_PGA_2P048:    
-      fReturn = (ads1115_getConversion(bTriggerAndPoll) * ADS1115_MV_2P048);
+      espErr = ads1115_getConversion(bTriggerAndPoll, &sData);
+      *pfData = sData * ADS1115_MV_2P048;
       break;       
     case ADS1115_PGA_1P024:     
-      fReturn = (ads1115_getConversion(bTriggerAndPoll) * ADS1115_MV_1P024);
+      espErr = ads1115_getConversion(bTriggerAndPoll, &sData);
+      *pfData = sData * ADS1115_MV_1P024;
       break;       
     case ADS1115_PGA_0P512:      
-      fReturn = (ads1115_getConversion(bTriggerAndPoll) * ADS1115_MV_0P512);
+      espErr = ads1115_getConversion(bTriggerAndPoll, &sData);
+      *pfData = sData * ADS1115_MV_0P512;
       break;       
     case ADS1115_PGA_0P256:           
     case ADS1115_PGA_0P256B:          
     case ADS1115_PGA_0P256C:      
-      fReturn = (ads1115_getConversion(bTriggerAndPoll) * ADS1115_MV_0P256);
+      espErr = ads1115_getConversion(bTriggerAndPoll, &sData);
+      *pfData = sData * ADS1115_MV_0P256;
       break;       
   }
-  return fReturn;
+  return espErr;
 }
 
 /**
@@ -636,7 +649,10 @@ BYTE ads1115_getMultiplexer()
  */
 esp_err_t ads1115_setMultiplexer(BYTE byMux) 
 {
-  esp_err_t espErr = ads1115_writeBitsInWord(ADS1115_RA_CONFIG, ADS1115_CFG_MUX_BIT, ADS1115_CFG_MUX_LENGTH, byMux);
+  SHORT sStartStopDummy;
+  esp_err_t espErr; 
+
+  espErr = ads1115_writeBitsInWord(ADS1115_RA_CONFIG, ADS1115_CFG_MUX_BIT, ADS1115_CFG_MUX_LENGTH, byMux);
   if (espErr == ESP_OK) 
   {
     s_byMuxMode = byMux;
@@ -648,7 +664,7 @@ esp_err_t ads1115_setMultiplexer(BYTE byMux)
       {
         return espErr;
       }
-      ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+      ads1115_getConversion(GET_CONVERSION_READ_ONLY, &sStartStopDummy);
       espErr = ads1115_setMode(ADS1115_MODE_CONTINUOUS);
       if(espErr != ESP_OK)
       {
@@ -690,6 +706,7 @@ BYTE ads1115_getGain()
  */
 esp_err_t ads1115_setGain(BYTE byGain) 
 {
+  SHORT sStartStopDummy;
   esp_err_t espErr;
 
   espErr = ads1115_writeBitsInWord(ADS1115_RA_CONFIG, ADS1115_CFG_PGA_BIT, ADS1115_CFG_PGA_LENGTH, byGain);
@@ -701,7 +718,7 @@ esp_err_t ads1115_setGain(BYTE byGain)
      // Force a stop/start
      espErr = ads1115_setMode(ADS1115_MODE_SINGLESHOT);
      if(espErr != ESP_OK) return espErr;
-     ads1115_getConversion(GET_CONVERSION_READ_ONLY);
+     ads1115_getConversion(GET_CONVERSION_READ_ONLY, &sStartStopDummy);
      espErr = ads1115_setMode(ADS1115_MODE_CONTINUOUS);
     }
   }

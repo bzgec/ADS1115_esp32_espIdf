@@ -2,7 +2,7 @@
 #define __main_h
 
 #include "Types.h"
-#include "bitInRegOperations.h"
+//#include "bitInRegOperations.h"
 
 
 #define PIN_SDA           GPIO_NUM_21

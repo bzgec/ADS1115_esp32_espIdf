@@ -73,7 +73,6 @@
 #define ADS1115_PGA_VOLTAGE_RANGE_0P256  0256
 
 
-
 /*
  * LSB = FSR / 2^16
  *
@@ -177,16 +176,16 @@ void ads1115_set_alert_pin(BYTE byPinAlrt);
 void ads1115_setToDefault();
 esp_err_t ads1115_testConnection();
 BOOL ads1115_pollConversion(WORD wMax_retries);
-SHORT ads1115_getConversion(BOOL bTriggerAndPoll);
-SHORT ads1115_getConversionP0N1();
-SHORT ads1115_getConversionP0N3();
-SHORT ads1115_getConversionP1N3();
-SHORT ads1115_getConversionP2N3();
-SHORT ads1115_getConversionP0GND();
-SHORT ads1115_getConversionP1GND();
-SHORT ads1115_getConversionP2GND();
-SHORT ads1115_getConversionP3GND();
-float ads1115_getMilliVolts(BOOL bTriggerAndPoll);
+esp_err_t ads1115_getConversion(BOOL bTriggerAndPoll, SHORT *psData);
+esp_err_t ads1115_getConversionP0N1(SHORT *psData);
+esp_err_t ads1115_getConversionP0N3(SHORT *psData);
+esp_err_t ads1115_getConversionP1N3(SHORT *psData);
+esp_err_t ads1115_getConversionP2N3(SHORT *psData);
+esp_err_t ads1115_getConversionP0GND(SHORT *psData);
+esp_err_t ads1115_getConversionP1GND(SHORT *psData);
+esp_err_t ads1115_getConversionP2GND(SHORT *psData);
+esp_err_t ads1115_getConversionP3GND(SHORT *psData);
+esp_err_t ads1115_getMilliVolts(BOOL bTriggerAndPoll, float *pfData);
 float ads1115_getMvPerCount();
 BOOL ads1115_isConversionReady();
 esp_err_t ads1115_triggerConversion();
